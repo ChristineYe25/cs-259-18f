@@ -5,7 +5,7 @@
 #include <algorithm>
 #include "xcl2.hpp"
 
-#define NUM_IMAGES 180
+#define NUM_IMAGES 5
 
 using std::vector;
 using std::cout;
