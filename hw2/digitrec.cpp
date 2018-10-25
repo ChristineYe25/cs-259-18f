@@ -40,7 +40,7 @@ void Dis(unsigned long* data_local){
             }
             for(int j=0;j<7;j++){
 #pragma HLS pipeline
-                dis_local[i+m*49]+=(data_local[m]&(1L<<(i*7+j))>>(i*7+j);
+                dis_local[i+m*49]+=(data_local[m]&(1L<<(i*7+j)))>>(i*7+j);
             }
         }
         Reduct<4>(dis_local,m*49);
@@ -58,7 +58,7 @@ void Update (unsigned long* knn_mat,unsigned long* data_local,int x){
              max_id=i;
            }
          }
-        if(data_local[m])<knn_mat[max_id+(x*3)]{
+        if(data_local[m]<knn_mat[max_id+(x*3)]){
             knn_mat[max_id + (x3*3)]=data_local[m];
          }
     }
