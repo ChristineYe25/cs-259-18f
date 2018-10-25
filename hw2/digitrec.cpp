@@ -5,7 +5,7 @@
 using namespace std;
 
 
-const int memory_size=18;
+const int memory_size=8;
 
 void Load (unsigned long* data_dram, unsigned long* data_local,int index){
 #pragma HLS inline off
@@ -40,10 +40,8 @@ dis:
 #pragma HLS unroll
         unsigned long dis_local[8];
         for(int i=0;i<7;i++){
-#pragma HLS pipeline
             unsigned int temp=0;
             for(int j=0;j<7;j++){
-#pragma HLS unroll
                 temp+=(data_local[m]&(1L<<(i*7+j)))>>(i*7+j);
             }
             dis_local[i]=temp;
