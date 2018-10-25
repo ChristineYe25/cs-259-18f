@@ -38,9 +38,11 @@ void Dis(unsigned long* data_local){
    // unsigned long dis_local[8*memory_size];
     for(int m=0;m<memory_size;m++){
 #pragma HLS unroll
+        unsigned long dis=0;
         for(int i=0;i<49;i++){
-            data_local[m]+=(data_local[m] & (1L<<i))>>i;
+            dis+=(data_local[m] & (1L<<i))>>i;
         }
+        data_local[m]=dis;
     }
  //   cout<<" dis success";
 /*
