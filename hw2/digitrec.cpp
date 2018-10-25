@@ -37,11 +37,11 @@ void Dis(unsigned long* data_local){
         unsigned long dis_local[8];
 #pragma HLS array_partition variable = dis_local cyclic factor = 8
         for(int i=0;i<7;i++){
-#pragma HLS unroll
+//#pragma HLS unroll
             unsigned int temp=0;
-#pragma HLS array_partition variable = temp complete
+//#pragma HLS array_partition variable = temp complete
             for(int j=0;j<7;j++){
-#pragma HLS pipeline
+//#pragma HLS pipeline
                 temp+=(data_local[m]&(1L<<(i*7+j)))>>(i*7+j);
             }
             dis_local[i]=temp;
