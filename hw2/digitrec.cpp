@@ -37,15 +37,16 @@ void Dis(unsigned long* data_local){
 #pragma HLS inline off
    // unsigned long dis_local[8*memory_size];
     for(int m=0;m<memory_size;m++){
-#pragma HLS unroll
+/*#pragma HLS unroll
         unsigned long dis=0;
         for(int i=0;i<49;i++){
             dis+=(data_local[m] & (1L<<i))>>i;
         }
         data_local[m]=dis;
     }
+ */
  //   cout<<" dis success";
-/*
+
  #pragma HLS unroll
         for(int i=0;i<8;i++){
 #pragma HLS unroll
@@ -63,7 +64,7 @@ void Dis(unsigned long* data_local){
         Reduce<1>(dis_local,m*49);
        data_local[m]=dis_local[m*49];
     }
- */
+ 
 }
 void Update (unsigned char* knn_mat,unsigned long* data_local,int x){
     unsigned long max_id=0;
