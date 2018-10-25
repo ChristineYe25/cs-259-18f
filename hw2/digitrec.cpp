@@ -10,7 +10,7 @@ const int memory_size=10;
 void Load (unsigned long* data_dram, unsigned long* data_local,int index){
 #pragma HLS inline off
     for(int i=0;i<memory_size;i++){
-#pragma HLS unroll
+#pragma HLS pipeline
         data_local[i]=data_dram[index+i];
     }
     
@@ -33,14 +33,11 @@ void Reduce(unsigned long *array){
 void Dis(unsigned long* data_local){
 #pragma HLS inline off
     for(int m=0;m<memory_size;m++){
-         #pragma HLS unroll
-        unsigned long dis_local[8];
-#pragma HLS array_partition variable = dis_local cyclic factor = 8
-        for(int i=0;i<7;i++){
 #pragma HLS unroll
+        unsigned long dis_local[8];
+        for(int i=0;i<7;i++){
             unsigned int temp=0;
             for(int j=0;j<7;j++){
-#pragma HLS pipeline
                 temp+=(data_local[m]&(1L<<(i*7+j)))>>(i*7+j);
             }
             dis_local[i]=temp;
@@ -93,10 +90,7 @@ init:
 
  //the 10 digit loop
    for(int i=0;i<10;i++){
-      // cout<<" test i =" + i;
-#pragma HLS pipeline
         for(int y=0;y<1800/memory_size;y++){
-#pragma HLS pipeline
             Load(train_images,data_local,i*1800+y*memory_size);
             Diff(data_local,test_image);
             Dis(data_local);
