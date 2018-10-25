@@ -11,7 +11,7 @@ void Load (unsigned long* data_dram, unsigned long* data_local,int index){
 #pragma HLS inline off
 load:
     for(int i=0;i<memory_size;i++){
-#pragma HLS unroll
+#pragma HLS pipeline
         data_local[i]=data_dram[index+i];
     }
     
@@ -20,7 +20,7 @@ void Diff(unsigned long* data_local,unsigned long test_image){
 #pragma HLS inline off
 diff:
     for(int i=0;i<memory_size;i++){
-#pragma HLS unroll
+#pragma HLS pipeline
         data_local[i]=data_local[i]^test_image;
     }
 }
@@ -29,7 +29,7 @@ void Reduce(unsigned long *array){
 #pragma HLS inline off
 reduce:
     for(int i=0;i<n;++i){
-#pragma HLS unroll
+#pragma HLS pipeline
         array[i]+=array[i+n];
     }
 }
@@ -37,7 +37,7 @@ void Dis(unsigned long* data_local){
 #pragma HLS inline off
 dis:
     for(int m=0;m<memory_size;m++){
-#pragma HLS unroll
+#pragma HLS pipeline
         unsigned long dis_local[8];
         for(int i=0;i<7;i++){
             unsigned int temp=0;
@@ -59,7 +59,7 @@ void Update (unsigned char* knn_mat,unsigned long* data_local,int x){
 unsigned long max_id=0;
 update:
     for (int m=0;m<memory_size;m++){
-#pragma HLS unroll
+#pragma HLS pipeline
         for(int i=0;i<3;i++){
             if(knn_mat[max_id+(x*3)]<knn_mat[(i+(x*3))]){
              max_id=i;
