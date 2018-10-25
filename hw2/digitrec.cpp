@@ -20,7 +20,7 @@ load:
     }
     
 }
-void Compute(const bool enable,unsigned long* data_local, unsigned long test_image){
+void Compute(const bool enable,unsigned long* data_local, unsigned long test_image,unsigned char* knn_mat, int x){
 #pragma HLS inline off
     if(enable){
     for(int i=0;i<kBurstSize/kTileSize;++i) {
@@ -33,6 +33,15 @@ void Compute(const bool enable,unsigned long* data_local, unsigned long test_ima
                 dis+=(data_local[i*kTileSize+j] & (1L<<z))>>z;
             }
             data_local[i*kTileSize+j]=dis;
+            unsigned long max_id = 0;
+            for (int k=0;k<3;++k){
+                if (knn_mat[max_id + (x * 3)] < knn_mat[(k + (x * 3))]) {
+                    max_id = k;
+                }
+            }
+            if (data_local[i*kTileSize+j] < knn_mat[max_id + (x * 3)]) {
+                knn_mat[max_id + (x * 3)] = data_local[i*kTileSize+j];
+            }
         }
     }
 }
@@ -84,7 +93,7 @@ digit:
 #pragma HLS loop_tripcount min = kMinTripCount max = kMaxTripCount
            if((j/kBurstSize)%2){
                Load(j<1800,train_images,data_local_0);
-               Compute(j>0,data_local_1,test_image);
+               Compute(j>0,data_local_1,test_image,knn_mat,i);
            }
            else {
                Load(j<1800,train_images,data_local_1);
@@ -95,19 +104,6 @@ digit:
  
 
 //
-update:
-    for (int x3 = 0; x3 < 10; ++x3) {
-        for (int y3 = 0; y3 < 1800; ++y3) {
-            unsigned long max_id = 0;
-            for (int i1 = 0; i1 < 3; ++i1) {
-                if (knn_mat[max_id + (x3 * 3)] < knn_mat[(i1 + (x3 * 3))]) {
-                    max_id = i1;
-                }
-            }
-            if (temp[y3 + (x3 * 1800)] < knn_mat[max_id + (x3 * 3)]) {
-                knn_mat[max_id + (x3 * 3)] = temp[y3 + (x3 * 1800)];
-            }
-        }
-    }
+
 }
 } // extern "C"
