@@ -43,8 +43,8 @@ void Dis(unsigned long* data_local){
                 dis_local[i+m*49]+=(data_local[m]&(1L<<(i*7+j)))>>(i*7+j);
             }
         }
-        Reduct<4>(dis_local,m*49);
-        Reduct<2>(dis_local,m*49);
+        Reduce<4>(dis_local,m*49);
+        Reduce<2>(dis_local,m*49);
         Reduce<1>(dis_local,m*49);
        data_local[m]=dis_local[m*49];
     }
@@ -59,7 +59,7 @@ void Update (unsigned long* knn_mat,unsigned long* data_local,int x){
            }
          }
         if(data_local[m]<knn_mat[max_id+(x*3)]){
-            knn_mat[max_id + (x3*3)]=data_local[m];
+            knn_mat[max_id + (x*3)]=data_local[m];
          }
     }
 }
@@ -76,7 +76,7 @@ void digitrec_kernel(
 #pragma HLS interface s_axilite port=return bundle=control
 
   unsigned int a;
-  unsigned data_local[memory_size];
+  unsigned long data_local[memory_size];
 #pragma HLS array_partition variable = data_local cyclic factor = memory_size
     
 init:
@@ -95,7 +95,7 @@ init:
             Load(train_images[i*1800+y*memory_size+z],data_local);
             Diff(data_local,test_image);
             Dis(data_local);
-            Update(data_local);
+            Update(knn_mat,data_local,i);
             
         }
     }
