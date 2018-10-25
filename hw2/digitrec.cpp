@@ -24,9 +24,9 @@ void Diff(unsigned long* data_local,unsigned long test_image){
    // cout<<" Diff success";
 }
 template<int n>
-void Reduce(unsigned long *array,int start){
+void Reduce(unsigned long *array){
 #pragma HLS inline off
-    for(int i=start;i<n;++i){
+    for(int i=0;i<n;++i){
 #pragma HLS unroll
         array[i]+=array[i+n];
     }
@@ -34,9 +34,10 @@ void Reduce(unsigned long *array,int start){
 }
 void Dis(unsigned long* data_local){
 #pragma HLS inline off
-        unsigned long dis_local[8*memory_size];
+    
     for(int m=0;m<memory_size;m++){
          #pragma HLS unroll
+        unsigned long dis_local[8];
         for(int i=0;i<7;i++){
 #pragma HLS unroll
             unsigned int temp=0;
@@ -45,13 +46,13 @@ void Dis(unsigned long* data_local){
                 temp+=(data_local[m]&(1L<<(i*7+j)))>>(i*7+j);
             }
            
-            dis_local[i+m*8]=temp;
+            dis_local[i]=temp;
         }
-        dis_local[7+m*8]=0;
-        Reduce<4>(dis_local,m*8);
-        Reduce<2>(dis_local,m*8);
-        Reduce<1>(dis_local,m*8);
-       data_local[m]=dis_local[m*8];
+        dis_local[7]=0;
+        Reduce<4>(dis_local);
+        Reduce<2>(dis_local);
+        Reduce<1>(dis_local);
+       data_local[m]=dis_local[0];
     }
  
 }
