@@ -2,7 +2,7 @@
 #include <math.h>
 #include <assert.h>
 
-extern "C" {
+
 const int memory_size=100;
 
 void Load (unsigned long* data_dram, unsigned long* data_local){
@@ -63,7 +63,7 @@ void Update (unsigned long* knn_mat,unsigned long* data_local,int x){
          }
     }
 }
-
+extern "C" {
 void digitrec_kernel(
     unsigned long test_image,
     unsigned long* train_images,
