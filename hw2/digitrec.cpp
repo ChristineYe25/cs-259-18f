@@ -29,10 +29,10 @@ void Compute(const bool enable,unsigned long* data_local, unsigned long test_ima
 #pragma HLS unroll
             data_local[i*kTileSize+j]=data_local[i*kTileSize+j]^test_image;
             unsigned long dis=0;
-           /* for(int z=0;z<49;++z){
+           for(int z=0;z<49;++z){
                 dis+=(data_local[i*kTileSize+j] & (1L<<z))>>z;
             }
-            */
+            
             data_local[i*kTileSize+j]=dis;
             unsigned long max_id = 0;
       /*      for (int k=0;k<3;++k){
