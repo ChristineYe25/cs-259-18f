@@ -35,7 +35,7 @@ void Compute(const bool enable,unsigned long* data_local, unsigned long test_ima
             */
             data_local[i*kTileSize+j]=dis;
             unsigned long max_id = 0;
-            for (int k=0;k<3;++k){
+      /*      for (int k=0;k<3;++k){
                 if (knn_mat[max_id + (x * 3)] < knn_mat[(k + (x * 3))]) {
                     max_id = k;
                 }
@@ -44,6 +44,7 @@ void Compute(const bool enable,unsigned long* data_local, unsigned long test_ima
                 knn_mat[max_id + (x * 3)] = data_local[i*kTileSize+j];
             }
         }
+       */
     }
 }
 }
