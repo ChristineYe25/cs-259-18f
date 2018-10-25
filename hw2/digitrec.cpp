@@ -64,7 +64,7 @@ void Dis(unsigned long* data_local){
  */
 }
 void Update (unsigned char* knn_mat,unsigned long* data_local,int x){
-    unsigned long max_id;
+    unsigned long max_id=0;
     for (int m=0;m<memory_size;m++){
 #pragma HLS unroll
         for(int i=0;i<3;i++){
