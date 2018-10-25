@@ -5,7 +5,7 @@
 using namespace std;
 
 
-const int memory_size=30;
+const int memory_size=18;
 
 void Load (unsigned long* data_dram, unsigned long* data_local,int index){
 #pragma HLS inline off
@@ -70,6 +70,17 @@ update:
          }
     }
 }
+void Loop(unsigned long* train_images,unsigned long* data_local,int i,unsigned char* knn_mat,unsigned long test_image) {
+loop_ins:
+for(int y=0;y<1800/memory_size;y++){
+#pragma HLS pipeline
+    Load(train_images,data_local,i*1800+y*memory_size);
+    Diff(data_local,test_image);
+    Dis(data_local);
+    Update(knn_mat,data_local,i);
+              
+          }
+)
 extern "C" {
 void digitrec_kernel(
     unsigned long test_image,
@@ -97,13 +108,7 @@ init:
  //the 10 digit loop
 digit:
    for(int i=0;i<10;i++){
-     for(int y=0;y<1800/memory_size;y++){
-            Load(train_images,data_local,i*1800+y*memory_size);
-            Diff(data_local,test_image);
-            Dis(data_local);
-            Update(knn_mat,data_local,i);
-            
-        }
+       Loop(train_images,data_local,i,knn_mat,test_image);
     }
  
 }
