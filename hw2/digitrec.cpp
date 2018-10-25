@@ -68,7 +68,7 @@ void Update (unsigned char* knn_mat,unsigned long* data_local,int x){
     for (int m=0;m<memory_size;m++){
 #pragma HLS unroll
         for(int i=0;i<3;i++){
-            if(knn_mat[max_id]+(x*3)<knn_mat[(i+(x*3))]){
+            if(knn_mat[max_id+(x*3)]<knn_mat[(i+(x*3))]){
              max_id=i;
            }
          }
