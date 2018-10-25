@@ -47,8 +47,7 @@ void Dis(unsigned long* data_local){
            
             dis_local[i+m*8]=temp;
         }
-         dis_local[7+m*8]=0;
-        
+        dis_local[7+m*8]=0;
         Reduce<4>(dis_local,m*8);
         Reduce<2>(dis_local,m*8);
         Reduce<1>(dis_local,m*8);
