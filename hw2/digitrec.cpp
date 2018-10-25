@@ -13,7 +13,6 @@ void Load (unsigned long* data_dram, unsigned long* data_local,int index){
 #pragma HLS unroll
         data_local[i]=data_dram[index+i];
     }
- //   cout<<" load success";
     
 }
 void Diff(unsigned long* data_local,unsigned long test_image){
@@ -46,9 +45,10 @@ void Dis(unsigned long* data_local){
                 temp+=(data_local[m]&(1L<<(i*7+j)))>>(i*7+j);
             }
            
-            
+            dis_local[i+m*8]=temp;
         }
-        dis_local[7+m*8]=0;
+         dis_local[7+m*8]=0;
+        
         Reduce<4>(dis_local,m*8);
         Reduce<2>(dis_local,m*8);
         Reduce<1>(dis_local,m*8);
