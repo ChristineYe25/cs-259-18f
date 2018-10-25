@@ -8,8 +8,8 @@ using namespace std;
 const int memory_size=18;
 
 void Load (unsigned long* data_dram, unsigned long* data_local,int index){
-load:
 #pragma HLS inline off
+load:
     for(int i=0;i<memory_size;i++){
 #pragma HLS unroll
         data_local[i]=data_dram[index+i];
@@ -17,8 +17,8 @@ load:
     
 }
 void Diff(unsigned long* data_local,unsigned long test_image){
-diff:
 #pragma HLS inline off
+diff:
     for(int i=0;i<memory_size;i++){
 #pragma HLS unroll
         data_local[i]=data_local[i]^test_image;
@@ -26,16 +26,16 @@ diff:
 }
 template<int n>
 void Reduce(unsigned long *array){
-reduce:
 #pragma HLS inline off
+reduce:
     for(int i=0;i<n;++i){
 #pragma HLS unroll
         array[i]+=array[i+n];
     }
 }
 void Dis(unsigned long* data_local){
-dis:
 #pragma HLS inline off
+dis:
     for(int m=0;m<memory_size;m++){
 #pragma HLS unroll
         unsigned long dis_local[8];
@@ -55,7 +55,8 @@ dis:
  
 }
 void Update (unsigned char* knn_mat,unsigned long* data_local,int x){
-    unsigned long max_id=0;
+#pragma HLS inline off
+unsigned long max_id=0;
 update:
     for (int m=0;m<memory_size;m++){
 #pragma HLS unroll
@@ -94,12 +95,10 @@ init:
     }
 
  //the 10 digit loop
-loop1:
+10digit:
    for(int i=0;i<10;i++){
-#pragma HLS pipeline
-loop2:
+ins:
         for(int y=0;y<1800/memory_size;y++){
-#pragma HLS pipeline
             Load(train_images,data_local,i*1800+y*memory_size);
             Diff(data_local,test_image);
             Dis(data_local);
