@@ -43,8 +43,9 @@ void Compute(const bool enable,unsigned long* data_local, unsigned long test_ima
             if (data_local[i*kTileSize+j] < knn_mat[max_id + (x * 3)]) {
                 knn_mat[max_id + (x * 3)] = data_local[i*kTileSize+j];
             }
-        }
        */
+        }
+       
     }
 }
 }
