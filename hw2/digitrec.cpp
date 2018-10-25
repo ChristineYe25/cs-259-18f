@@ -105,7 +105,7 @@ digit:
                Compute(j>0,data_local_0,test_image,knn_mat_local,i);
            }
        }
-       for(z=0;z<3;z++){
+       for(int z=0;z<3;z++){
            knn_mat[i*3+z]=knn_mat_local[i*3+z];
        }
     }
