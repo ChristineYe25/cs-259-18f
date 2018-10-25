@@ -80,7 +80,7 @@ for(int y=0;y<1800/memory_size;y++){
     Update(knn_mat,data_local,i);
               
           }
-)
+}
 extern "C" {
 void digitrec_kernel(
     unsigned long test_image,
