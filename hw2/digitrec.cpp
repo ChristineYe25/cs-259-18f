@@ -110,8 +110,8 @@ init:
 #pragma HLS pipeline
             Load(train_images,data_local,i*1800+y*memory_size);
             Diff(data_local,test_image);
-          //  Dis(data_local);
-          //  Update(knn_mat,data_local,i);
+            Dis(data_local);
+            Update(knn_mat,data_local,i);
             
         }
     }
