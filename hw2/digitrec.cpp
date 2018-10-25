@@ -21,7 +21,6 @@ void Diff(unsigned long* data_local,unsigned long test_image){
 #pragma HLS unroll
         data_local[i]=data_local[i]^test_image;
     }
-   // cout<<" Diff success";
 }
 template<int n>
 void Reduce(unsigned long *array){
@@ -30,11 +29,9 @@ void Reduce(unsigned long *array){
 #pragma HLS unroll
         array[i]+=array[i+n];
     }
-//    cout<<" reduce success";
 }
 void Dis(unsigned long* data_local){
 #pragma HLS inline off
-    
     for(int m=0;m<memory_size;m++){
          #pragma HLS unroll
         unsigned long dis_local[8];
@@ -45,7 +42,6 @@ void Dis(unsigned long* data_local){
 #pragma HLS pipeline
                 temp+=(data_local[m]&(1L<<(i*7+j)))>>(i*7+j);
             }
-           
             dis_local[i]=temp;
         }
         dis_local[7]=0;
@@ -69,7 +65,6 @@ void Update (unsigned char* knn_mat,unsigned long* data_local,int x){
             knn_mat[max_id + (x*3)]=data_local[m];
          }
     }
-  //  cout<<" update success";
 }
 extern "C" {
 void digitrec_kernel(
