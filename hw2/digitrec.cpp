@@ -49,7 +49,7 @@ void Dis(unsigned long* data_local){
        data_local[m]=dis_local[m*49];
     }
 }
-void Update (unsigned long* knn_mat,unsigned long* data_local,int x){
+void Update (unsigned char* knn_mat,unsigned long* data_local,int x){
     unsigned long max_id;
     for (int m=0;m<memory_size;m++){
 #pragma HLS unroll
@@ -92,7 +92,7 @@ init:
 #pragma HLS pipeline
         for(int y=0;y<1800/memory_size;y++){
 #pragma HLS pipeline
-            Load(train_images[i*1800+y*memory_size+z],data_local);
+            Load(train_images[i*1800+y*memory_size],data_local);
             Diff(data_local,test_image);
             Dis(data_local);
             Update(knn_mat,data_local,i);
