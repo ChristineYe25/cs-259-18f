@@ -95,7 +95,7 @@ init:
     }
 
  //the 10 digit loop
-10digit:
+digit:
    for(int i=0;i<10;i++){
 ins:
         for(int y=0;y<1800/memory_size;y++){
