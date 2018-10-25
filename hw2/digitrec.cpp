@@ -15,7 +15,10 @@ void Load (const bool enable,unsigned long* data_dram, unsigned long* data_local
 load:
     for(int i=0;i<kBurstSize;++i){
 #pragma HLS pipeline
-        data_local[i]=data_dram[i];
+        for(int j=0;j<kTileSize;++j){
+#pragma HLS unroll
+        data_local[i*kTileSize+j]=data_dram[i*kTileSize+j];
+        }
     }
     }
     
