@@ -48,11 +48,11 @@ void Dis(unsigned long* data_local){
             dis_local[i+i*m]=temp;
             
         }
-        dis_local[7+m*memory_size]=0;
-        Reduce<4>(dis_local,m*memory_size);
-        Reduce<2>(dis_local,m*memory_size);
-        Reduce<1>(dis_local,m*memory_size);
-       data_local[m]=dis_local[m*memory_size];
+        dis_local[7+m*8]=0;
+        Reduce<4>(dis_local,m*8);
+        Reduce<2>(dis_local,m*8);
+        Reduce<1>(dis_local,m*8);
+       data_local[m]=dis_local[m*8];
     }
  
 }
