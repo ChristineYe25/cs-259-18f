@@ -35,7 +35,7 @@ void Reduce(unsigned long *array,int start){
 }
 void Dis(unsigned long* data_local){
 #pragma HLS inline off
-   // unsigned long dis_local[8*memory_size];
+    unsigned long dis_local[8*memory_size];
     for(int m=0;m<memory_size;m++){
 /*#pragma HLS unroll
         unsigned long dis=0;
