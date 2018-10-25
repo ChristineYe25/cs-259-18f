@@ -5,7 +5,7 @@
 using namespace std;
 
 
-const int memory_size=18;
+const int memory_size=30;
 
 void Load (unsigned long* data_dram, unsigned long* data_local,int index){
 #pragma HLS inline off
@@ -97,8 +97,7 @@ init:
  //the 10 digit loop
 digit:
    for(int i=0;i<10;i++){
-ins:
-        for(int y=0;y<1800/memory_size;y++){
+     for(int y=0;y<1800/memory_size;y++){
             Load(train_images,data_local,i*1800+y*memory_size);
             Diff(data_local,test_image);
             Dis(data_local);
