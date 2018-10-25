@@ -5,7 +5,7 @@
 using namespace std;
 
 
-const int memory_size=100;
+const int memory_size=18;
 
 void Load (unsigned long* data_dram, unsigned long* data_local,int index){
 load:
