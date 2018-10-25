@@ -6,24 +6,38 @@ using namespace std;
 
 
 const int memory_size=10;
+const int kBurstSize=180;
+const int kTileSize=10;
 
-void Load (unsigned long* data_dram, unsigned long* data_local,int index){
+void Load (const bool enable,unsigned long* data_dram, unsigned long* data_local){
 #pragma HLS inline off
+    if(enable){
 load:
-    for(int i=0;i<memory_size;i++){
+    for(int i=0;i<kBurstSize;++i){
 #pragma HLS pipeline
-        data_local[i]=data_dram[index+i];
+        data_local[i]=data_dram[i];
+    }
     }
     
 }
-void Diff(unsigned long* data_local,unsigned long test_image){
+void Compute(const bool enable,unsigned* data_local, unsigned long test_image){
 #pragma HLS inline off
-diff:
-    for(int i=0;i<memory_size;i++){
+    if(enable){
+    for(int i=0;i<kBurstSize/kTileSize;++i) {
 #pragma HLS pipeline
-        data_local[i]=data_local[i]^test_image;
+        for(int j=0;j<kTileSize;++j){
+#pragma HLS unroll
+            data_local[i*kTileSize+j]=data_local[i*kTileSize+j]^test_image
+            unsigned long dis=0;
+            for(int z=0;z<49;++z){
+                dis+=(data_local[i*kTileSize+j] & (1L<<z))>>z;
+            }
+            data_local[i*kTileSize]+j]=dis;
+        }
     }
 }
+}
+
 template<int n>
 void Reduce(unsigned long *array){
 #pragma HLS inline off
@@ -33,27 +47,7 @@ reduce:
         array[i]+=array[i+n];
     }
 }
-void Dis(unsigned long* data_local){
-#pragma HLS inline off
-dis:
-    for(int m=0;m<memory_size;m++){
-#pragma HLS pipeline
-        unsigned long dis_local[8];
-        for(int i=0;i<7;i++){
-            unsigned int temp=0;
-            for(int j=0;j<7;j++){
-                temp+=(data_local[m]&(1L<<(i*7+j)))>>(i*7+j);
-            }
-            dis_local[i]=temp;
-        }
-        dis_local[7]=0;
-        Reduce<4>(dis_local);
-        Reduce<2>(dis_local);
-        Reduce<1>(dis_local);
-       data_local[m]=dis_local[0];
-    }
- 
-}
+
 void Update (unsigned char* knn_mat,unsigned long* data_local,int x){
 #pragma HLS inline off
 unsigned long max_id=0;
@@ -94,9 +88,12 @@ void digitrec_kernel(
 #pragma HLS interface s_axilite port=return bundle=control
 
   unsigned int a;
-  unsigned long data_local[memory_size];
-#pragma HLS array_partition variable = data_local cyclic factor = memory_size
-    
+    const int kMinTripCount=1;
+    const int kMaxTripCount=kMinTripCount+1800/kBurstSize;
+    unsigned long data_local_0[kBurstSize];
+    unsigned long data_local_1[kBurstSize];
+#pragma HLS array_partition variable = data_local_0 cyclic factor = kTileSize
+#pragma HLS array_partition variable = data_local_1 cyclic factor = kTileSize
 init:
     for (int x = 0; x < 10; ++x) {
         for (int y = 0; y < 3; ++y) {
@@ -105,12 +102,37 @@ init:
         }
     }
 
- //the 10 digit loop
+ //computation
 digit:
-   for(int i=0;i<10;i++){
-       Loop(train_images,data_local,i,knn_mat,test_image);
+   for(int i=0;i<10;++i,train_images+=1800){
+       for(int j=0;j<1800+kBurstSize;j+=kBurstSize,train_images+=kBurstSize){
+#pragma HLS loop_tripcount min = kMinTripCount max = kMaxTripCount
+           if((j/kBurstSize)%2){
+               Load(j<1800,train_images,data_local_0);
+               Compute(j>0,data_local_1,test_image);
+           }
+           else {
+               Load(j<1800,train_images,data_local_1);
+               Compute(j>0,data_local_0,test_image);
+           }
+       }
     }
  
 }
+//
+update:
+    for (int x3 = 0; x3 < 10; ++x3) {
+        for (int y3 = 0; y3 < 1800; ++y3) {
+            unsigned long max_id = 0;
+            for (int i1 = 0; i1 < 3; ++i1) {
+                if (knn_mat[max_id + (x3 * 3)] < knn_mat[(i1 + (x3 * 3))]) {
+                    max_id = i1;
+                }
+            }
+            if (temp[y3 + (x3 * 1800)] < knn_mat[max_id + (x3 * 3)]) {
+                knn_mat[max_id + (x3 * 3)] = temp[y3 + (x3 * 1800)];
+            }
+        }
+    }
 
 } // extern "C"
