@@ -80,7 +80,7 @@ void digitrec_kernel(
     const int kMaxTripCount=kMinTripCount+1800/kBurstSize;
     unsigned long data_local_0[kBurstSize];
     unsigned long data_local_1[kBurstSize];
-    unsigned char* knn_mat_local[30];
+    unsigned char knn_mat_local[30];
 #pragma HLS array_partition variable = data_local_0 cyclic factor = kTileSize
 #pragma HLS array_partition variable = data_local_1 cyclic factor = kTileSize
 init:
