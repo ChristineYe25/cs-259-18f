@@ -7,14 +7,14 @@ using namespace std;
 
 const int memory_size=10;
 const int kBurstSize=180;
-const int kTileSize=18;
+const int kTileSize=10;
 
 void Load (const bool enable,unsigned long* data_dram, unsigned long* data_local){
 #pragma HLS inline off
     if(enable){
 load:
     for(int i=0;i<kBurstSize;++i){
-#pragma HLS pipeline
+#pragma HLS unroll
         data_local[i]=data_dram[i];
     }
     }
