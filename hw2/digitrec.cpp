@@ -104,12 +104,12 @@ init:
 
  //the 10 digit loop
    for(int i=0;i<10;i++){
-       cout<<" test i =" + i;
+      // cout<<" test i =" + i;
 #pragma HLS pipeline
         for(int y=0;y<1800/memory_size;y++){
 #pragma HLS pipeline
             Load(train_images,data_local,i*1800+y*memory_size);
-         //   Diff(data_local,test_image);
+            Diff(data_local,test_image);
           //  Dis(data_local);
           //  Update(knn_mat,data_local,i);
             
