@@ -54,7 +54,7 @@ void Dis(unsigned long* data_local){
             dis_local[7]=0;
             for(int j=0;j<7;j++){
 #pragma HLS pipeline
-                dis_local[i]+=(data_local[m]&(1L<<(i*7+j)))>>(i*7+j);
+                dis_local[j]+=(data_local[m]&(1L<<(i*7+j)))>>(i*7+j);
             }
         }
         Reduce<4>(dis_local);
