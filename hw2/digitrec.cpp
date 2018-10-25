@@ -10,7 +10,7 @@ const int memory_size=10;
 void Load (unsigned long* data_dram, unsigned long* data_local,int index){
 #pragma HLS inline off
     for(int i=0;i<memory_size;i++){
-#pragma HLS pipeline
+#pragma HLS unroll
         data_local[i]=data_dram[index+i];
     }
     
@@ -90,6 +90,7 @@ init:
 
  //the 10 digit loop
    for(int i=0;i<10;i++){
+#pragma HLS pipeline
         for(int y=0;y<1800/memory_size;y++){
             Load(train_images,data_local,i*1800+y*memory_size);
             Diff(data_local,test_image);
