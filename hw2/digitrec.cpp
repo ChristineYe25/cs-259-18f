@@ -27,7 +27,7 @@ void Compute(const bool enable,unsigned long* data_local, unsigned long test_ima
 #pragma HLS pipeline
         for(int j=0;j<kTileSize;++j){
 #pragma HLS unroll
-            data_local[i*kTileSize+j]=data_local[i*kTileSize+j]^test_image
+            data_local[i*kTileSize+j]=data_local[i*kTileSize+j]^test_image;
             unsigned long dis=0;
             for(int z=0;z<49;++z){
                 dis+=(data_local[i*kTileSize+j] & (1L<<z))>>z;
@@ -97,7 +97,7 @@ digit:
            }
            else {
                Load(j<1800,train_images,data_local_1);
-               Compute(j>0,data_local_0,test_image);
+               Compute(j>0,data_local_0,test_image,knn_mat,i);
            }
        }
     }
