@@ -5,11 +5,11 @@
 
 const int memory_size=100;
 
-void Load (unsigned long* data_dram, unsigned long* data_local){
+void Load (unsigned long* data_dram, unsigned long* data_local,int index){
 #pragma HLS inline off
     for(int i=0;i<memory_size;i++){
 #pragma HLS unroll
-        data_local[i]=data_dram[i];
+        data_local[i]=data_dram[index+i];
     }
 }
 void Diff(unsigned long* data_local,unsigned long test_image){
@@ -92,7 +92,7 @@ init:
 #pragma HLS pipeline
         for(int y=0;y<1800/memory_size;y++){
 #pragma HLS pipeline
-            Load(train_images[i*1800+y*memory_size],data_local);
+            Load(train_images,data_local,i*1800+y*memory_size);
             Diff(data_local,test_image);
             Dis(data_local);
             Update(knn_mat,data_local,i);
