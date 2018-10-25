@@ -20,7 +20,7 @@ load:
     }
     
 }
-void Compute(const bool enable,unsigned* data_local, unsigned long test_image){
+void Compute(const bool enable,unsigned long* data_local, unsigned long test_image){
 #pragma HLS inline off
     if(enable){
     for(int i=0;i<kBurstSize/kTileSize;++i) {
@@ -32,7 +32,7 @@ void Compute(const bool enable,unsigned* data_local, unsigned long test_image){
             for(int z=0;z<49;++z){
                 dis+=(data_local[i*kTileSize+j] & (1L<<z))>>z;
             }
-            data_local[i*kTileSize]+j]=dis;
+            data_local[i*kTileSize+j]=dis;
         }
     }
 }
@@ -93,7 +93,7 @@ digit:
        }
     }
  
-}
+
 //
 update:
     for (int x3 = 0; x3 < 10; ++x3) {
@@ -109,5 +109,5 @@ update:
             }
         }
     }
-
+}
 } // extern "C"
