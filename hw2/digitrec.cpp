@@ -39,6 +39,7 @@ void Dis(unsigned long* data_local){
         for(int i=0;i<7;i++){
 #pragma HLS unroll
             unsigned int temp=0;
+#pragma HLS array_partition variable = temp complete
             for(int j=0;j<7;j++){
 #pragma HLS pipeline
                 temp+=(data_local[m]&(1L<<(i*7+j)))>>(i*7+j);
