@@ -95,7 +95,7 @@ init:
     }
 
  //the 10 digit loop
-    for(int i=0;i<10;i++){
+/*    for(int i=0;i<10;i++){
 #pragma HLS pipeline
         for(int y=0;y<1800/memory_size;y++){
 #pragma HLS pipeline
@@ -106,6 +106,6 @@ init:
             
         }
     }
-}
+}/*/
 
 } // extern "C"
