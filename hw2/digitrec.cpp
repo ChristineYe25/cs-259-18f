@@ -48,33 +48,8 @@ reduce:
     }
 }
 
-void Update (unsigned char* knn_mat,unsigned long* data_local,int x){
-#pragma HLS inline off
-unsigned long max_id=0;
-update:
-    for (int m=0;m<memory_size;m++){
-#pragma HLS pipeline
-        for(int i=0;i<3;i++){
-            if(knn_mat[max_id+(x*3)]<knn_mat[(i+(x*3))]){
-             max_id=i;
-           }
-         }
-        if(data_local[m]<knn_mat[max_id+(x*3)]){
-            knn_mat[max_id + (x*3)]=data_local[m];
-         }
-    }
-}
-void Loop(unsigned long* train_images,unsigned long* data_local,int i,unsigned char* knn_mat,unsigned long test_image) {
-loop_ins:
-for(int y=0;y<1800/memory_size;y++){
-#pragma HLS pipeline
-    Load(train_images,data_local,i*1800+y*memory_size);
-    Diff(data_local,test_image);
-    Dis(data_local);
-    Update(knn_mat,data_local,i);
-              
-          }
-}
+
+
 extern "C" {
 void digitrec_kernel(
     unsigned long test_image,
