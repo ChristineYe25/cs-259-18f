@@ -45,7 +45,7 @@ void Dis(unsigned long* data_local){
 #pragma HLS pipeline
                 temp+=(data_local[m]&(1L<<(i*7+j)))>>(i*7+j);
             }
-            dis_local[i+i*m]=temp;
+           
             
         }
         dis_local[7+m*8]=0;
