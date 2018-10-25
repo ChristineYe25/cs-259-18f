@@ -88,7 +88,7 @@ init:
 
  //computation
 digit:
-   for(int i=0;i<10;++i,train_images+=1800){
+   for(int i=0;i<10;++i){
        for(int j=0;j<1800+kBurstSize;j+=kBurstSize,train_images+=kBurstSize){
 #pragma HLS loop_tripcount min = kMinTripCount max = kMaxTripCount
            if((j/kBurstSize)%2){
