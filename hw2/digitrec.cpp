@@ -35,6 +35,7 @@ void Dis(unsigned long* data_local){
     for(int m=0;m<memory_size;m++){
          #pragma HLS unroll
         unsigned long dis_local[8];
+#pragma HLS array_partition variable = dis_local cyclic factor = 8
         for(int i=0;i<7;i++){
 #pragma HLS unroll
             unsigned int temp=0;
