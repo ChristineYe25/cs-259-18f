@@ -19,37 +19,34 @@ load:
     }
 }
     }
-void Compute(const bool enable,unsigned long* data_local, unsigned long test_image,int x,unsigned int* min){
+void Compute(const bool enable,unsigned long* data_local, unsigned long test_image,int x,unsigned char* min){
 #pragma HLS inline off
     if(enable){
     for(int i=0;i<kBurstSize/kTileSize;++i) {
 #pragma HLS pipeline
+        unsigned long dis[kTileSize];
+#pragma HLS array_partition variable = dis cyclic factor = kTileSize
         for(int j=0;j<kTileSize;++j){
 #pragma HLS unroll
             data_local[i*kTileSize+j]=data_local[i*kTileSize+j]^test_image;
-            unsigned long dis=0;
+            dis[j]=0;
            for(int z=0;z<49;++z){
-                dis+=(data_local[i*kTileSize+j] & (1L<<z))>>z;
+                dis[j]+=(data_local[i*kTileSize+j] & (1L<<z))>>z;
             }
-            
-            if(dis<min[0]){
-                min[2]=min[1];
-                min[1]=min[0];
-                min[0]=dis;
-                
-            }
-            else if (dis<min[1]){
-                min[2]=min[1];
-                min[1]=dis;
-                
-            }
-            else if (dis<min[2]){
-                min[2]=dis;
-            }
-            data_local[i*kTileSize+j]=dis;
-       
+             data_local[i*kTileSize+j]=dis[j];
         }
-       
+        for(int j=0;j<kTileSize;j++){
+            unsigned int max_id=0;
+            for(int z=0;z<3;z++){
+                if(min[max_id]<min[z]){
+                    max_id=z;
+                }
+            if(dis[j]<min[max_id]){
+                min[max_id]=dis[j];
+                
+            }
+            }
+        }
     }
 }
 }
@@ -84,14 +81,14 @@ void digitrec_kernel(
     const int kMaxTripCount=kMinTripCount+1800/kBurstSize;
     unsigned long data_local_0[kBurstSize];
     unsigned long data_local_1[kBurstSize];
-    unsigned int min[3];
+    unsigned char min[3];
 #pragma HLS array_partition variable = data_local_0 cyclic factor = kTileSize
 #pragma HLS array_partition variable = data_local_1 cyclic factor = kTileSize
  //computation
 digit:
    for(int i=0;i<10;++i){
        for(int mi=0;mi<3;++mi){
-           min[mi]=50;
+           min[mi]=(unsigned char)50;
        }
        for(int j=0;j<1800+kBurstSize;j+=kBurstSize,train_images+=kBurstSize){
 #pragma HLS loop_tripcount min = kMinTripCount max = kMaxTripCount
