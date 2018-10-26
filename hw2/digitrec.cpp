@@ -37,24 +37,15 @@ void Compute(const bool enable,unsigned long* data_local, unsigned long test_ima
         }
         for(int j=0;j<kTileSize;j++){
             unsigned int max_id=0;
-            if(min[0]>min[1]&&min[0]>min[2]){
-                max_id=0;
-                
-            }
-            else if (min[1]>min[0]&&min[1]>min[2]){
-                max_id=1;
-                
-            }
-            else if (min[2]>min[0]&&min[2]>min[1]){
-                max_id=2;
-            }
+            for(int z=0;z<3;z++){
+                if(min[max_id]<min[z]){
+                    max_id=z;
+                }
             if(dis[j]<min[max_id]){
                 min[max_id]=dis[j];
                 
             }
-           
-       
-        
+            }
         }
     }
 }
