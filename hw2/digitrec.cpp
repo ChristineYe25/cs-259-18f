@@ -36,7 +36,7 @@ void Compute(const bool enable,unsigned long* data_local, unsigned long test_ima
              data_local[i*kTileSize+j]=dis[j];
         }
         for(int j=0;j<kTileSize;j++){
-            unsiged int max_id=0;
+            unsigned int max_id=0;
             if(min[0]>min[1]&&min[0]>min[2]){
                 max_id=0;
                 
