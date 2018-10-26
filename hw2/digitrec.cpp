@@ -37,8 +37,8 @@ void Compute(const bool enable,unsigned long* data_local, unsigned long test_ima
                 if(min[max_id]<min[z]){
                     max_id=z;
                 }
-                if(dis[j]<min[max_id]){
-                    min[max_id]=dis[j];
+                if(dis<min[max_id]){
+                    min[max_id]=dis;
                     
                 }
             }
@@ -48,7 +48,7 @@ void Compute(const bool enable,unsigned long* data_local, unsigned long test_ima
         }
     }
 }
-}
+
 
 template<int n>
 void Reduce(unsigned long *array){
