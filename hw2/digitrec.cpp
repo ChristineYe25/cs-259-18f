@@ -19,7 +19,7 @@ load:
     }
 }
     }
-void Compute(const bool enable,unsigned long* data_local, unsigned long test_image,unsigned char* knn_mat, int x,unsigned int* min){
+void Compute(const bool enable,unsigned long* data_local, unsigned long test_image,int x,unsigned int* min){
 #pragma HLS inline off
     if(enable){
     for(int i=0;i<kBurstSize/kTileSize;++i) {
@@ -108,11 +108,11 @@ digit:
 #pragma HLS loop_tripcount min = kMinTripCount max = kMaxTripCount
            if((j/kBurstSize)%2){
                Load(j<1800,train_images,data_local_0);
-               Compute(j>0,data_local_1,test_image,knn_mat_local,i,min);
+               Compute(j>0,data_local_1,test_image,i,min);
            }
            else {
                Load(j<1800,train_images,data_local_1);
-               Compute(j>0,data_local_0,test_image,knn_mat_local,i,min);
+               Compute(j>0,data_local_0,test_image,i,min);
            }
        }
        for(int z=0;z<3;z++){
