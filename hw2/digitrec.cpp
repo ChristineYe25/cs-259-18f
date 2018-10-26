@@ -24,14 +24,18 @@ void Compute(const bool enable,unsigned long* data_local, unsigned long test_ima
     if(enable){
     for(int i=0;i<kBurstSize/kTileSize;++i) {
 #pragma HLS pipeline
+        unsigned long dis[kTileSize];
+#pragma HLS array_partition variable = dis cyclic factor = kTileSize
         for(int j=0;j<kTileSize;++j){
 #pragma HLS unroll
             data_local[i*kTileSize+j]=data_local[i*kTileSize+j]^test_image;
             unsigned long dis=0;
            for(int z=0;z<49;++z){
-                dis+=(data_local[i*kTileSize+j] & (1L<<z))>>z;
+                dis[j]+=(data_local[i*kTileSize+j] & (1L<<z))>>z;
             }
-            
+             data_local[i*kTileSize+j]=dis;
+        }
+        for(int j=0;j<kTileSize;j++){
             if(dis<min[0]){
                 min[2]=min[1];
                 min[1]=min[0];
@@ -46,10 +50,10 @@ void Compute(const bool enable,unsigned long* data_local, unsigned long test_ima
             else if (dis<min[2]){
                 min[2]=dis;
             }
-            data_local[i*kTileSize+j]=dis;
+           
        
+        
         }
-       
     }
 }
 }
