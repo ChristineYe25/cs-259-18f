@@ -29,7 +29,7 @@ void Compute(const bool enable,unsigned long* data_local, unsigned long test_ima
         for(int j=0;j<kTileSize;++j){
 #pragma HLS unroll
             data_local[i*kTileSize+j]=data_local[i*kTileSize+j]^test_image;
-            unsigned long dis=0;
+            dis[j]=0;
            for(int z=0;z<49;++z){
                 dis[j]+=(data_local[i*kTileSize+j] & (1L<<z))>>z;
             }
