@@ -19,7 +19,7 @@ load:
     }
 }
     }
-void Compute(const bool enable,unsigned long* data_local, unsigned long test_image,int x,unsigned int* min){
+void Compute(const bool enable,unsigned long* data_local, unsigned long test_image,int x,unsigned char* min){
 #pragma HLS inline off
     if(enable){
     for(int i=0;i<kBurstSize/kTileSize;++i) {
@@ -84,14 +84,14 @@ void digitrec_kernel(
     const int kMaxTripCount=kMinTripCount+1800/kBurstSize;
     unsigned long data_local_0[kBurstSize];
     unsigned long data_local_1[kBurstSize];
-    unsigned int min[3];
+    unsigned char min[3];
 #pragma HLS array_partition variable = data_local_0 cyclic factor = kTileSize
 #pragma HLS array_partition variable = data_local_1 cyclic factor = kTileSize
  //computation
 digit:
    for(int i=0;i<10;++i){
        for(int mi=0;mi<3;++mi){
-           min[mi]=50;
+           min[mi]=(unsigned char)50;
        }
        for(int j=0;j<1800+kBurstSize;j+=kBurstSize,train_images+=kBurstSize){
 #pragma HLS loop_tripcount min = kMinTripCount max = kMaxTripCount
@@ -105,7 +105,7 @@ digit:
            }
        }
        for(int z=0;z<3;z++){
-           knn_mat[i*3+z]=(unsigned char)min[z];
+           knn_mat[i*3+z]=min[z];
        }
     }
  
