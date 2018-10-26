@@ -22,7 +22,7 @@ load:
     }
     
 }
-void Compute(const bool enable,unsigned long* data_local, unsigned long test_image,unsigned char* knn_mat, int x){
+void Compute(const bool enable,unsigned long* data_local, unsigned long test_image,unsigned char* knn_mat, int x,unsigned int* min){
 #pragma HLS inline off
     if(enable){
     for(int i=0;i<kBurstSize/kTileSize;++i) {
@@ -35,7 +35,22 @@ void Compute(const bool enable,unsigned long* data_local, unsigned long test_ima
                 dis+=(data_local[i*kTileSize+j] & (1L<<z))>>z;
             }
             
+            if(dis<min[0]){
+                min[2]=min[1];
+                min[1]=min[0];
+                min[0]=dis;
+                
+            }
+            else if (dis<min[1]){
+                min[2]=min[1];
+                min[1]=dis;
+                
+            }
+            else if (dis<min[2]){
+                min[2]=dis;
+            }
             data_local[i*kTileSize+j]=dis;
+         /*
             unsigned long max_id = 0;
             for (int k=0;k<3;++k){
                 if (knn_mat[max_id + (x * 3)] < knn_mat[(k + (x * 3))]) {
@@ -45,6 +60,7 @@ void Compute(const bool enable,unsigned long* data_local, unsigned long test_ima
             if (data_local[i*kTileSize+j] < knn_mat[max_id + (x * 3)]) {
                 knn_mat[max_id + (x * 3)] = data_local[i*kTileSize+j];
             }
+          */
        
         }
        
@@ -83,6 +99,7 @@ void digitrec_kernel(
     unsigned long data_local_0[kBurstSize];
     unsigned long data_local_1[kBurstSize];
     unsigned char knn_mat_local[30];
+    unsigned int min[3];
 #pragma HLS array_partition variable = data_local_0 cyclic factor = kTileSize
 #pragma HLS array_partition variable = data_local_1 cyclic factor = kTileSize
 init:
@@ -91,24 +108,28 @@ init:
             // Note that the max distance is 49
             knn_mat_local[(y + (x * 3))] = (unsigned char)50;
         }
+        
     }
 
  //computation
 digit:
    for(int i=0;i<10;++i){
+       for(int mi=0;mi<3;++mi){
+           min[mi]=50;
+       }
        for(int j=0;j<1800+kBurstSize;j+=kBurstSize,train_images+=kBurstSize){
 #pragma HLS loop_tripcount min = kMinTripCount max = kMaxTripCount
            if((j/kBurstSize)%2){
                Load(j<1800,train_images,data_local_0);
-               Compute(j>0,data_local_1,test_image,knn_mat_local,i);
+               Compute(j>0,data_local_1,test_image,knn_mat_local,i,min);
            }
            else {
                Load(j<1800,train_images,data_local_1);
-               Compute(j>0,data_local_0,test_image,knn_mat_local,i);
+               Compute(j>0,data_local_0,test_image,knn_mat_local,i,min);
            }
        }
        for(int z=0;z<3;z++){
-           knn_mat[i*3+z]=knn_mat_local[i*3+z];
+           knn_mat[i*3+z]=min[z];
        }
     }
  
