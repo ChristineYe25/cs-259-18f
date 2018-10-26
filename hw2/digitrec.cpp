@@ -15,13 +15,10 @@ void Load (const bool enable,unsigned long* data_dram, unsigned long* data_local
 load:
     for(int i=0;i<kBurstSize;++i){
 #pragma HLS pipeline
-       
         data_local[i]=data_dram[i];
-        
     }
-    }
-    
 }
+    }
 void Compute(const bool enable,unsigned long* data_local, unsigned long test_image,unsigned char* knn_mat, int x,unsigned int* min){
 #pragma HLS inline off
     if(enable){
@@ -98,19 +95,9 @@ void digitrec_kernel(
     const int kMaxTripCount=kMinTripCount+1800/kBurstSize;
     unsigned long data_local_0[kBurstSize];
     unsigned long data_local_1[kBurstSize];
-    unsigned char knn_mat_local[30];
     unsigned int min[3];
 #pragma HLS array_partition variable = data_local_0 cyclic factor = kTileSize
 #pragma HLS array_partition variable = data_local_1 cyclic factor = kTileSize
-init:
-    for (int x = 0; x < 10; ++x) {
-        for (int y = 0; y < 3; ++y) {
-            // Note that the max distance is 49
-            knn_mat_local[(y + (x * 3))] = (unsigned char)50;
-        }
-        
-    }
-
  //computation
 digit:
    for(int i=0;i<10;++i){
