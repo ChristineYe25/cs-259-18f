@@ -37,11 +37,12 @@ void Compute(const bool enable,unsigned long* data_local, unsigned long test_ima
                 if(min[max_id]<min[z]){
                     max_id=z;
                 }
+            }
                 if(dis<min[max_id]){
                     min[max_id]=dis;
                     
                 }
-            }
+            
         }
        
         
