@@ -33,22 +33,22 @@ void Compute(const bool enable,unsigned long* data_local, unsigned long test_ima
            for(int z=0;z<49;++z){
                 dis[j]+=(data_local[i*kTileSize+j] & (1L<<z))>>z;
             }
-             data_local[i*kTileSize+j]=dis;
+             data_local[i*kTileSize+j]=dis[j];
         }
         for(int j=0;j<kTileSize;j++){
-            if(dis<min[0]){
+            if(dis[j]<min[0]){
                 min[2]=min[1];
                 min[1]=min[0];
-                min[0]=dis;
+                min[0]=dis[j];
                 
             }
-            else if (dis<min[1]){
+            else if (dis[j]<min[1]){
                 min[2]=min[1];
-                min[1]=dis;
+                min[1]=dis[j];
                 
             }
-            else if (dis<min[2]){
-                min[2]=dis;
+            else if (dis[j]<min[2]){
+                min[2]=dis[j];
             }
            
        
