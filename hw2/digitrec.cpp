@@ -105,7 +105,7 @@ digit:
            }
        }
        for(int z=0;z<3;z++){
-           knn_mat[i*3+z]=min[z];
+           knn_mat[i*3+z]=(unsigned char)min[z];
        }
     }
  
