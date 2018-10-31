@@ -10,15 +10,18 @@ void digitrec_kernel(
 #pragma ACCEL interface variable=train_images depth=18000 bus_bitwidth=512
 #pragma ACCEL interface variable=knn_mat depth=30
     unsigned char buf_knn_mat[10][3];
-#pragma ACCEL parallel factor=10
+#pragma ACCEL parallel factor=30
+load:
     for (int x = 0; x < 10; ++x) {
         for (int y = 0; y < 3; ++y) {
             buf_knn_mat[x][y] = 50;
         }
     }
     
-#pragma ACCEL parallel factor=10
+#pragma ACCEL pipeline flatten
+digit:
     for (int x = 0; x < 10; ++x) {
+    image:
         for (int y = 0; y < 1800; ++y) {
             unsigned long temp = train_images[x * 1800 + y] ^ test_image;
             unsigned char dis = 0;
@@ -39,7 +42,8 @@ void digitrec_kernel(
             }
         }
     }
-#pragma ACCEL parallel factor=10
+#pragma ACCEL parallel factor=30
+write:
     for (int x = 0; x < 10; ++x) {
         for (int y = 0; y < 3; ++y) {
             knn_mat[x * 3 + y] = buf_knn_mat[x][y];
