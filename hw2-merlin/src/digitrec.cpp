@@ -8,6 +8,7 @@ void digitrec_kernel(
         unsigned long* train_images,
         unsigned char* knn_mat) {
 #pragma ACCEL interface variable=train_images depth=18000 bus_bitwidth=512
+#pragma ACCEL interface variable=knn_mat depth=30
     unsigned char buf_knn_mat[10][3];
 #pragma ACCEL parallel factor=10
     for (int x = 0; x < 10; ++x) {
