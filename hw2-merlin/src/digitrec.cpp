@@ -20,7 +20,7 @@ void digitrec_kernel(
 
 #pragma ACCEL parallel factor=10
     for (int x = 0; x < 10; ++x) {
-#pragma ACCEL parallel factor=180
+#pragma ACCEL parallel factor=30
         for (int y = 0; y < 1800; ++y) {
             unsigned long temp = train_images[x * 1800 + y] ^ test_image;
             unsigned char dis = 0;
