@@ -17,7 +17,7 @@ void digitrec_kernel(
         }
     }
 
-#pragma ACCEL parallel factor=5
+#pragma ACCEL parallel factor=10
     for (int x = 0; x < 10; ++x) {
 #pragma ACCEL parallel factor=10
         for (int y = 0; y < 1800; ++y) {
