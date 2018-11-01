@@ -10,6 +10,7 @@ void digitrec_kernel(
 #pragma ACCEL interface variable=train_images depth=18000 bus_bitwidth=512
 #pragma ACCEL interface variable=knn_mat depth=30
     unsigned char buf_knn_mat[10][3];
+#pragma ACCEL tiling factor=30
     for (int x = 0; x < 10; ++x) {
         for (int y = 0; y < 3; ++y) {
             buf_knn_mat[x][y] = 50;
@@ -40,7 +41,7 @@ void digitrec_kernel(
             }
         }
     }
-
+#pragma ACCEL tiling factor=30
     for (int x = 0; x < 10; ++x) {
         for (int y = 0; y < 3; ++y) {
             knn_mat[x * 3 + y] = buf_knn_mat[x][y];
