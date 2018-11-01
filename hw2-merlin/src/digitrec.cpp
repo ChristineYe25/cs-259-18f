@@ -23,7 +23,7 @@ void digitrec_kernel(
         for (int y = 0; y < 1800; ++y) {
             unsigned long temp = train_images[x * 1800 + y] ^ test_image;
             unsigned char dis = 0;
-#pragma ACCEL parallel reduction=dis factor=7
+#pragma ACCEL parallel reduction=dis factor=49
             for (int i = 0; i < 49; ++i) {
                 dis += (temp & (1L << i)) >> i;
             }
