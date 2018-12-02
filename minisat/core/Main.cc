@@ -19,7 +19,7 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 **************************************************************************************************/
 
 #include <errno.h>
-#include <chrono.h>
+#include <chrono>
 #include <signal.h>
 #include <zlib.h>
 
