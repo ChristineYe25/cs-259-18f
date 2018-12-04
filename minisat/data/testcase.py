@@ -25,6 +25,8 @@ while(i<num_clau):
         print(key)
         if key in map:
             continue
+        if(a<0 & b<0 & c<0):
+            continue
         file.write(str(a)+" "+str(b)+" "+ str(c)+" 0"+"\n")
         map[key]=1
         i+=1
