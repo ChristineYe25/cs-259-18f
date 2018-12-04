@@ -19,7 +19,6 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 **************************************************************************************************/
 
 #include <errno.h>
-#include <chrono>
 #include <signal.h>
 #include <zlib.h>
 
@@ -90,7 +89,6 @@ int main(int argc, char** argv)
 
         Solver S;
         double initial_time = cpuTime();
-        auto ts1=std::chrono::high_resolution_clock::now();
 
         S.verbosity = verb;
         
@@ -141,9 +139,6 @@ int main(int argc, char** argv)
             printf("|  Number of clauses:    %12d                                         |\n", S.nClauses()); }
         
         double parsed_time = cpuTime();
-        auto ts2=std::chrono::high_resolution_clock::now();
-        std::chrono::duration<double> readtime = ts2 - ts1;
-        printf("ReadTime:  %g s\n",readtime.count());
         if (S.verbosity > 0){
             printf("|  Parse time:           %12.2f s                                       |\n", parsed_time - initial_time);
             printf("|                                                                             |\n"); }
@@ -183,9 +178,7 @@ int main(int argc, char** argv)
                 fprintf(res, "INDET\n");
             fclose(res);
         }
-        auto ts3=std::chrono::high_resolution_clock::now();
-        std::chrono::duration<double> kerneltime = ts3 - ts2;
-        printf("ReadTime:  %g s\n",kerneltime.count());
+    
         
         
 #ifdef NDEBUG
